@@ -6,9 +6,8 @@ tasks:
       mysql -e "CREATE USER 'monUser'@'localhost' IDENTIFIED BY 'monPassword';"
       mysql -e "CREATE DATABASE GestionPedaBD"
       mysql -e "GRANT ALL PRIVILEGES ON GestionPedaBD.* TO 'monUser'@'localhost';"
-      mysql -u monUser -pmonPassword GestionPedaBD < gestion_peda_mysql.sql
       mvn package
-  - command: mvn compile exec:java -Dexec.mainClass=fr.univ_amu.iut.TestJDBC -Dexec.cleanupDaemonThreads=false
+  - command: mvn compile exec:java -Dexec.mainClass=fr.univ_amu.iut.tutojpa.TestJPA -Dexec.cleanupDaemonThreads=false
 
 ports:
   - port: 3306

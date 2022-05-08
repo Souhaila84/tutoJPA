@@ -1,4 +1,4 @@
-package fr.univ_amu.iut.tutoJPA;
+package fr.univ_amu.iut.tutojpa;
 
 import jakarta.persistence.Embeddable;
 

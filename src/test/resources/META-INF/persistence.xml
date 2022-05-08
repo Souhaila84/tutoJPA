@@ -4,16 +4,16 @@
              version="2.0" xmlns="http://java.sun.com/xml/ns/persistence">
     <persistence-unit name="employePU" transaction-type="RESOURCE_LOCAL">
         <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
-        <class>fr.univ_amu.iut.tutoJPA.Employe</class>
-        <class>fr.univ_amu.iut.tutoJPA.Departement</class>
-        <class>fr.univ_amu.iut.tutoJPA.Adresse</class>
+        <class>fr.univ_amu.iut.tutojpa.Employe</class>
+        <class>fr.univ_amu.iut.tutojpa.Departement</class>
+        <class>fr.univ_amu.iut.tutojpa.Adresse</class>
 
         <properties>
             <property name="eclipselink.target-database" value="Derby"/>
-            <property name="javax.persistence.jdbc.driver" value="org.apache.derby.jdbc.EmbeddedDriver"/>
-            <property name="javax.persistence.jdbc.url" value="jdbc:derby:memory:employeBD;create=true"/>
-            <property name="javax.persistence.jdbc.user" value=""/>
-            <property name="javax.persistence.jdbc.password" value=""/>
+            <property name="jakarta.persistence.jdbc.driver" value="org.apache.derby.iapi.jdbc.AutoloadedDriver"/>
+            <property name="jakarta.persistence.jdbc.url" value="jdbc:derby:memory:employeBD;create=true"/>
+            <property name="jakarta.persistence.jdbc.user" value=""/>
+            <property name="jakarta.persistence.jdbc.password" value=""/>
             <property name="eclipselink.logging.level" value="FINE"/>
             <property name="eclipselink.ddl-generation.output-mode" value="database"/>
             <property name="eclipselink.ddl-generation" value="create-tables"/>

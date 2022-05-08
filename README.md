@@ -14,15 +14,15 @@
 
 ## Tutoriel de découverte de JPA
 
-L’objectif de ce tutoriel est de vous présenter rapidement JPA 2.0 et de vous le faire tester sur un projet extrêmement simple. Pour rappel, Java Persistence API est une [spécification standard de Java][1] permettant aux développeurs de gérer et manipuler des données relationnelles dans leurs applications. Cette API, bien qu’originaire du monde Java EE (Java Entreprise Edition), peut être utilisée aussi bien dans une application Java SE (Java Standard Edition) que dans un conteneur d’application Java EE.
+L’objectif de ce tutoriel est de vous présenter rapidement JPA 3.1 et de vous le faire tester sur un projet extrêmement simple. Pour rappel, Jakarta Persistence API est une spécification standard de Java permettant aux développeurs de gérer et manipuler des données relationnelles dans leurs applications. Cette API, bien qu’originaire du monde Jakarta EE (Jakarta Entreprise Edition), peut être utilisée aussi bien dans une application Java SE (Java Standard Edition) que dans un conteneur d’application Jakarta EE.
 
-JPA étant uniquement une spécification, il peut en exister plusieurs implémentations différentes. Si le code d’un projet se conforme parfaitement à la spécification, il est possible de passer d’une implémentation à une autre sans trop de difficulté. Comme Maven, JPA utilise la philosophie "Convention plutôt que configuration". L’idée est de faire décroître le nombre de décisions qu’un développeur doit prendre en lui proposant une convention adaptée au cas d’utilisation le plus classique qu’il pourra amender pour correspondre à ce qu’il veut faire. Ainsi la configuration n’est plus la norme mais l’exception.
+JPA étant uniquement une spécification, il peut en exister plusieurs implémentations différentes. Si le code d’un projet se conforme parfaitement à la spécification, il est possible de passer d’une implémentation à une autre sans trop de difficulté. Comme Maven, JPA utilise la philosophie "Convention plutôt que configuration". L’idée est de faire décroître le nombre de décisions qu’un développeur doit prendre en lui proposant une convention adaptée au cas d’utilisation le plus classique qu’il pourra amender pour correspondre à ce qu’il veut faire précisément. Ainsi la configuration n’est plus la norme, mais l’exception.
 
-Pour effectuer la configuration de la persistance, JPA utilise soit le mécanisme des annotations soit un fichier XML. Nous n’étudierons que les annotations car elles sont plus simples à mettre en œuvre et à maintenir en cohérence avec le code. Les annotations sont des méta-informations qui sont rajoutées aux classes métiers pour indiquer à JPA le travail qu’il doit faire pour les rendre persistantes. Le code des ces classes n’étant pas modifié, chacune d’elles reste un POJO ("Plain Old Java Object" que l’on pourrait traduire par "Bons Vieux Objets Java") que l’on pourra facilement tester (voir le tutoriel sur JUnit) comme n’importe quel POJO.
+Pour effectuer la configuration de la persistance, JPA utilise soit le mécanisme des annotations soit un fichier XML. Nous n’étudierons que les annotations, car elles sont plus simples à mettre en œuvre et à maintenir en cohérence avec le code. Les annotations sont des méta-informations qui sont rajoutées aux classes métiers pour indiquer à JPA le travail qu’il doit faire pour les rendre persistantes. Le code de ces classes n’étant pas modifié, chacune d’elles reste un POJO ("Plain Old Java Object" que l’on pourrait traduire par "Bons Vieux Objets Java") que l’on pourra facilement tester (voir le tutoriel sur JUnit) comme n’importe quel POJO.
 
 ## Mise en place de l’environnement de travail
 
-Pour simplifier au maximum l’utilisation de JPA 2.0 dans ce tutoriel, Maven sera utilisé pour la construction et la gestion des dépendance. Il est donc requis de faire le tutoriel Maven avant d’attaquer celui-ci.
+Pour simplifier au maximum l’utilisation de JPA 3.1 dans ce tutoriel, Maven sera utilisé pour la construction et la gestion des dépendances. Il est donc requis de faire le tutoriel Maven avant d’attaquer celui-ci.
 
 ### Installation
 
@@ -30,62 +30,84 @@ Voici la liste des outils qui seront utilisés pour la suite de ce tutoriel :
 
 - Maven : Outil de gestion du cycle de vie d’un projet de développement logiciel.
 
-- JPA 2.0 : Plus besoin de le présenter.
+- JPA 3.1 : Plus besoin de le présenter.
 
-- EclipseLink : Framework open source et implémentation de référence de JPA 2.0.
+- EclipseLink : Framework open source et implémentation de référence de JPA.
 
-- Derby : Apache Derby est un système de gestion de base de données relationnelle qui peut être embarqué dans un programme Java. Sa faible empreinte mémoire (moins de 2Mo) lui permet d’être utilisé dans un grand nombre de contexte (test unitaire dans ce tutoriel).
+- Derby : Apache Derby est un système de gestion de base de données relationnelle qui peut être embarqué dans un programme Java. Sa faible empreinte mémoire (moins de 2Mo) lui permet d’être utilisé dans un grand nombre de contextes (test unitaire dans ce tutoriel).
 
 - Postgres : Un SGBD-R open source.
 
 - JUnit : Framework de test unitaire java.
 
-- DbUnit : Extension de JUnit pour les applications très orientés BD.
+- DbUnit : Extension de JUnit pour les applications orientées BD.
 
 Mis à par Maven et Postgres, tous les autres outils seront installés automatiquement grâce au système de gestion de dépendances de Maven.
 
 ### Création du projet
 
-Pour commencer, nous allons créer le projet de test que l’on nommera `tutoJPA` et qui sera dans le package `fr.univ_amu.iut`. Pour se faire on utilise la commande Maven suivante :
+Pour commencer, nous allons créer le projet de test que l’on nommera `tutojpa` et qui sera dans le package `fr.univ_amu.iut`. Pour se faire on utilise la commande Maven suivante :
 
 ```sh
-mvn archetype:generate -DinteractiveMode=false -DarchetypeArtifactId=maven-archetype-quickstart -DgroupId=fr.univ_amu.iut.tutoJPA -DartifactId=tutoJPA
+mvn archetype:generate -DinteractiveMode=false -DarchetypeArtifactId=maven-archetype-quickstart -DgroupId=fr.univ_amu.iut.tutojpa -DartifactId=tutojpa
 ```
 
-Une fois cette commande exécutée, il faut modifier le fichier `pom.xml` pour lui rajouter les dépendances nécessaires à un projet JPA 2.0 :
+Une fois cette commande exécutée, il faut modifier le fichier `pom.xml` pour lui rajouter les dépendances nécessaires à un projet JPA 3.1 :
 
 ```XML
-<project xmlns="http://maven.apache.org/POM/4.0.0" 
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-           xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 
-                               http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="https://maven.apache.org/POM/4.0.0" 
+         xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="https://maven.apache.org/POM/4.0.0 
+                               https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     
     <groupId>fr.univ_amu.iut</groupId>
-    <artifactId>tutoJPA</artifactId>
+    <artifactId>tutojpa</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <packaging>jar</packaging>
-    <name>tutoJPA</name>
+    <name>tutojpa</name>
     
     <url>http://maven.apache.org</url>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
+        <junit.jupiter.version>5.4.2</junit.jupiter.version>
+        <eclipselink.version>4.0.0-M3</eclipselink.version>
+        <jakarta.persistence.version>3.1.0</jakarta.persistence.version>
     </properties>
     
     <dependencies>
         <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.12</version>
-            <scope>test</scope>
+          <groupId>org.junit.jupiter</groupId>
+          <artifactId>junit-jupiter-api</artifactId>
+          <version>${junit.jupiter.version}</version>
+          <scope>test</scope>
         </dependency>
-        
+  
         <dependency>
-            <groupId>org.eclipse.persistence</groupId>
-            <artifactId>javax.persistence</artifactId>
-            <version>2.2.0</version>
+          <groupId>org.junit.jupiter</groupId>
+          <artifactId>junit-jupiter-engine</artifactId>
+          <version>${junit.jupiter.version}</version>
+          <scope>test</scope>
+        </dependency>
+      
+        <dependency>
+          <groupId>jakarta.persistence</groupId>
+          <artifactId>jakarta.persistence-api</artifactId>
+          <version>${jakarta.persistence.version}</version>
+        </dependency>
+  
+        <dependency>
+          <groupId>org.eclipse.persistence</groupId>
+          <artifactId>org.eclipse.persistence.jpa</artifactId>
+          <version>${eclipselink.version}</version>
+        </dependency>
+  
+        <dependency>
+          <groupId>org.eclipse.persistence</groupId>
+          <artifactId>eclipselink</artifactId>
+          <version>${eclipselink.version}</version>
         </dependency>
     </dependencies>
 </project>
@@ -95,11 +117,11 @@ D’autres dépendances seront ajoutées au fur et à mesure de leur nécessité
 
 ### Création des classes métiers
 
-L’exemple utilisé dans ce paragraphe est similaire à celui présenté dans le cours. Il modélise les employés d’une entreprise et les départements auxquels ils appartiennent. Il y aura donc 2 entités : `Employe` et `Departement`. L’adresse d’un employé sera modélisée par une classe intégrée. Dans le modèle de persistance JPA 2.0, un *entity bean* est une simple classe java (un Pojo) complétée par de simples annotations :
+L’exemple utilisé dans ce paragraphe est similaire à celui présenté dans le cours. Il modélise les employés d’une entreprise et les départements auxquels ils appartiennent. Il y aura donc 2 entités : `Employe` et `Departement`. L’adresse d’un employé sera modélisée par une classe intégrée. Dans le modèle de persistance JPA 3.1, un *entity bean* est une classe java (un Pojo) complétée par de simples annotations :
 
 ```Java
-package fr.univ_amu.iut.tutoJPA;
-import javax.persistence.*;
+package fr.univ_amu.iut.tutojpa;
+import jakarta.persistence.*;
 
 @Entity //1
 public class Employe {
@@ -133,23 +155,23 @@ public class Employe {
 
 Notez la présence d’annotations à plusieurs endroits dans la classe `Employe` :
 
-1. Tout d’abord, l’annotation `@javax.persistence.Entity` permet à JPA de reconnaître cette classe comme une classe persistante (une entité) et non comme une simple classe Java.
+1. Tout d’abord, l’annotation `@jakarta.persistence.Entity` permet à JPA de reconnaître cette classe comme une classe persistante (une entité) et non comme une simple classe Java.
 
-2. L’annotation `@javax.persistence.Id`, quant à elle, définit l’identifiant unique de l’objet. Elle donne à l’entité une identité en mémoire en tant qu’objet, et en base de données via une clé primaire. Les autres attributs seront rendus persistants par JPA en appliquant la convention suivante : le nom de la colonne est identique à celui de l’attribut et le type String est converti en `VARCHAR(255)`.
+2. L’annotation `@jakarta.persistence.Id`, quant à elle, définit l’identifiant unique de l’objet. Elle donne à l’entité une identité en mémoire en tant qu’objet, et en base de données via une clé primaire. Les autres attributs seront rendus persistants par JPA en appliquant la convention suivante : le nom de la colonne est identique à celui de l’attribut et le type String est converti en `VARCHAR(255)`.
 
-3. L’annotation `@javax.persistence.GeneratedValue` indique à JPA qu’il doit gérer automatiquement la génération automatique de la clef primaire.
+3. L’annotation `@jakarta.persistence.GeneratedValue` indique à JPA qu’il doit gérer automatiquement la génération automatique de la clef primaire.
 
-4. L’annotation `@javax.persistence.Column` permet de préciser des informations sur une colonne de la table : changer son nom (qui par défaut porte le même nom que l’attribut), préciser son type, sa taille et si la colonne autorise ou non la valeur null.
+4. L’annotation `@jakarta.persistence.Column` permet de préciser des informations sur une colonne de la table : changer son nom (qui par défaut porte le même nom que l’attribut), préciser son type, sa taille et si la colonne autorise ou non la valeur null.
 
-5. L’annotation `@javax.persistence.Embedded` précise que la donnée membre devra être intégrée dans l’entité.
+5. L’annotation `@jakarta.persistence.Embedded` précise que la donnée membre devra être intégrée dans l’entité.
 
-6. L’annotation `@javax.persistence.ManyToOne` indique à JPA que la donnée membre est une association N:1.
+6. L’annotation `@jakarta.persistence.ManyToOne` indique à JPA que la donnée membre est une association N:1.
 
-La classe `Departement` est elle aussi transformée en entité :
+La classe `Departement` est, elle aussi, transformée en entité :
 
 ```Java
-package fr.univ_amu.iut.tutoJPA;
-import javax.persistence.*;
+package fr.univ_amu.iut.tutojpa;
+import jakarta.persistence.*;
 
 @Entity
 public class Departement {
@@ -171,11 +193,11 @@ public class Departement {
 }
 ```
 
-La classe `Adresse` doit être annotée par l’annotation `@javax.persistence.Embeddable` pour pouvoir être intégrée dans la classe `Employe` :
+La classe `Adresse` doit être annotée par l’annotation `@jakarta.persistence.Embeddable` pour pouvoir être intégrée dans la classe `Employe` :
 
 ```Java
-package fr.univ_amu.iut.tutoJPA;
-import javax.persistence.*;
+package fr.univ_amu.iut.tutojpa;
+import jakarta.persistence.*;
 
 @Embeddable
 public class Adresse {
@@ -199,6 +221,7 @@ public class Adresse {
 ```
 
 ### Contexte de persistance
+Dans l'exemple suivant utilise le serveur MySQL local à l'image Gitpod. Si vous avez ouvert ce dépôt localement, utilisez plutôt les paramètres de votre connexion PostgresSQL de chez [Elephant SQL](https://www.elephantsql.com/plans.html). Pour Postgres, le nom complet de la classe pilote est `org.postgresql.Driver`.
 
 Les paramètres de la connexion à la base de données sont définis dans le fichier `persistence.xml`. Ce fichier doit être situé dans le dossier `META-INF` du `jar` de l’application. Ces paramètres seront utilisés par la suite par le gestionnaire d’entités pour établir la connexion au SGBD.
 
@@ -212,14 +235,14 @@ Pour que Maven place ce fichier au bon endroit à la construction du `jar`, il l
  version="2.0" xmlns="http://java.sun.com/xml/ns/persistence">
   <persistence-unit name="employePU" transaction-type="RESOURCE_LOCAL">
     <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
-    <class>fr.univ_amu.iut.tutoJPA.Employe</class>
-    <class>fr.univ_amu.iut.tutoJPA.Departement</class>
-    <class>fr.univ_amu.iut.tutoJPA.Adresse</class>
+    <class>fr.univ_amu.iut.tutojpa.Employe</class>
+    <class>fr.univ_amu.iut.tutojpa.Departement</class>
+    <class>fr.univ_amu.iut.tutojpa.Adresse</class>
     <properties>
-      <property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver"/>
-      <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/employeBD"/>
-      <property name="javax.persistence.jdbc.user"  value="monUser"/>
-      <property name="javax.persistence.jdbc.password"  value="monPassword"/>
+      <property name="jakarta.persistence.jdbc.driver" value="com.mysql.jdbc.Driver"/>
+      <property name="jakarta.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/employeBD"/>
+      <property name="jakarta.persistence.jdbc.user"  value="monUser"/>
+      <property name="jakarta.persistence.jdbc.password"  value="monPassword"/>
       <property name="eclipselink.logging.level" value="FINE" />
       <property name="eclipselink.ddl-generation"  value="create-tables"/>
     </properties>
@@ -227,7 +250,7 @@ Pour que Maven place ce fichier au bon endroit à la construction du `jar`, il l
 </persistence>
 ```
 
-D’après le fichier `persistence.xml` l’application se connectera à la base `employeBD` d'un serveur MySQL local avec l’utilisateur `"monUser"` et le mot de passe `"monPassword"`. Pour paramétrer correctement le serveur local, il faut exécuter les commandes suivantes :
+D’après le fichier `persistence.xml` l’application se connectera à la base `employeBD` d'un serveur MySQL local avec l’utilisateur `"monUser"` et le mot de passe `"monPassword"`. Pour paramétrer correctement ce serveur local, il faut exécuter les commandes suivantes :
 
 ```sh
 mysql --user=root --password=mysql --execute="create database employeBD"
@@ -265,8 +288,8 @@ Comme on peut le voir pour l’instant notre base de données est totalement vid
 Maintenant que l’entité `Employe` est développée et compilée, nous allons écrire une classe principale qui permettra de créer un objet `Employe` et de le rendre persistant. Pour cela, nous avons besoin d’initialiser le `EntityManager` par une factory, de démarrer une transaction, créer une instance de l’objet, définir le nom et le salaire de l’employé, utilisez `EntityManager.persist()` pour l’insérer dans la base de données, valider la transaction et fermer l’`EntityManager`.
 
 ```Java
-package fr.univ_amu.iut.tutoJPA;
-import javax.persistence.*;
+package fr.univ_amu.iut.tutojpa;
+import jakarta.persistence.*;
 
 public class App 
 {
@@ -290,20 +313,33 @@ public class App
 }
 ```
 
-Avant de lancer ce programme, il faut ajouter dans le fichier `pom.xml` les dépendances au connecteur MySQL et à EclipseLink. Pour ajouter ces dépendances, il faut rajouter les lignes suivantes à l'interieur de la balise `dependencies`:
+Avant de lancer ce programme, il faut ajouter dans le fichier `pom.xml` les dépendances au connecteur MySQL, Postgres et Derby. Pour ajouter ces dépendances, il faut rajouter les lignes suivantes à l'interieur de la balise `dependencies`:
 
 ```XML
 <dependency>
-    <groupId>org.eclipse.persistence</groupId>
-    <artifactId>eclipselink</artifactId>
-    <version>2.7.0</version>
-    <scope>compile</scope>
+  <groupId>mysql</groupId>
+  <artifactId>mysql-connector-java</artifactId>
+  <version>8.0.29</version>
 </dependency>
 
 <dependency>
-    <groupId>mysql</groupId>
-    <artifactId>mysql-connector-java</artifactId>
-    <version>5.1.44</version>
+  <groupId>org.postgresql</groupId>
+  <artifactId>postgresql</artifactId>
+  <version>42.3.5</version>
+</dependency>
+
+<dependency>
+  <groupId>org.apache.derby</groupId>
+  <artifactId>derby</artifactId>
+  <version>${derby.version}</version>
+  <scope>test</scope>
+</dependency>
+
+<dependency>
+  <groupId>org.apache.derby</groupId>
+  <artifactId>derbyclient</artifactId>
+  <version>${derby.version}</version>
+  <scope>test</scope>
 </dependency>
 ```
 
@@ -311,12 +347,12 @@ Maintenant nous allons utiliser la commande Maven `clean compile` pour compiler 
 
 ```sh
 mvn clean compile
-mvn exec:java -Dexec.mainClass="fr.univ_amu.iut.tutoJPA.TestJPA"
+mvn exec:java -Dexec.mainClass="fr.univ_amu.iut.tutojpa.TestJPA"
 ```
 
-Lorsque nous lançons la classe `fr.univ_amu.iut.tutoJPA.TestJPA` plusieurs choses vont se produire :
+Lorsque nous lançons la classe `fr.univ_amu.iut.tutojpa.TestJPA` plusieurs choses vont se produire :
 
-- Comme la propriété `eclipselink.ddl-generation` est initialisée à `create-tables` dans le fichier `persistence.xml`, les différentes tables sont créées si tel n’était pas le cas.
+- Comme la propriété `eclipselink.ddl-generation` est initialisée à `create-tables` dans le fichier `persistence.xml`, les différentes tables sont créées si nécessaire.
 
 - L’employé "Dupont" est inséré dans la base de données (avec un identifiant automatiquement généré).
 
@@ -371,6 +407,4 @@ mysql> select * from EMPLOYE;
 1 rows in set (0.00 sec)
 ```
 
-JPA associe une relation à chaque classe marquée par l’annotation `@Entity` et les données membres sont converties en attribut. Il gère aussi les associations N:1 en créant la clef étrangère dont le nom est construit à partir du nom de la clef et de la table liée. La classe `Adresse` est directement intégrée dans la table de l’entité `Employe`. Pour les clef auto-générée, JPA utilise une table nommée `SEQUENCE` pour mémoriser les identifiants déjà attribués.
-
-[1]: <http://www.jcp.org/en/jsr/detail?id=317>
+JPA associe une relation à chaque classe marquée par l’annotation `@Entity` et les données membres sont converties en attribut. Il gère aussi les associations N:1 en créant la clef étrangère dont le nom est construit à partir du nom de la clef et de la table liée. La classe `Adresse` est directement intégrée dans la table de l’entité `Employe`. Pour les clefs autogénérées, JPA utilise une table nommée `SEQUENCE` pour mémoriser les identifiants déjà attribués.

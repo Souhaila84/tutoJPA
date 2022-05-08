@@ -1,4 +1,4 @@
-package fr.univ_amu.iut.tutoJPA;
+package fr.univ_amu.iut.tutojpa;
 
 import jakarta.persistence.*;
 
@@ -48,7 +48,7 @@ public class Employe {
     }
 
     public void setAdresse(Adresse adresse) {
-        adresse = adresse;
+        this.adresse = adresse;
     }
 
     public Departement getDepartement() {

@@ -6,9 +6,9 @@
     <persistence-unit name="employePU" transaction-type="RESOURCE_LOCAL">
         <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
 
-        <class>fr.univ_amu.iut.tutoJPA.Employe</class>
-        <class>fr.univ_amu.iut.tutoJPA.Departement</class>
-        <class>fr.univ_amu.iut.tutoJPA.Adresse</class>
+        <class>fr.univ_amu.iut.tutojpa.Employe</class>
+        <class>fr.univ_amu.iut.tutojpa.Departement</class>
+        <class>fr.univ_amu.iut.tutojpa.Adresse</class>
 
         <properties>
             <property name="jakarta.persistence.jdbc.driver" value="org.postgresql.Driver"/>
