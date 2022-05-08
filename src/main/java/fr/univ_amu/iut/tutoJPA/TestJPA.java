@@ -8,19 +8,18 @@ import jakarta.persistence.Persistence;
 public class TestJPA {
     public static void main(String[] args) {
         // Initializes the Entity manager
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("employePU");
-        EntityManager em = emf.createEntityManager();
-        EntityTransaction tx = em.getTransaction();
-
-        // Creates a new object and persists it
-        Employe employe = new Employe();
-        employe.setNom("Dupont");
-        employe.setSalaire(5000);
-        tx.begin();
-        em.persist(employe);
-        tx.commit();
-
-        em.close();
-        emf.close();
+        try (EntityManagerFactory emf = Persistence.createEntityManagerFactory("employePU")) {
+            try (EntityManager em = emf.createEntityManager()) {
+                // Creates a new employee and persists it
+                Employe employe = new Employe();
+                employe.setNom("Dupont");
+                employe.setSalaire(5000);
+                
+                EntityTransaction tx = em.getTransaction();
+                tx.begin();
+                em.persist(employe);
+                tx.commit();
+            }
+        }
     }
 }

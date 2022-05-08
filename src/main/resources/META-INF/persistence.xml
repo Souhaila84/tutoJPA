@@ -11,14 +11,12 @@
         <class>fr.univ_amu.iut.tutoJPA.Adresse</class>
 
         <properties>
-            <property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver"/>
+            <property name="jakarta.persistence.jdbc.driver" value="org.postgresql.Driver"/>
+            <property name="jakarta.persistence.jdbc.url"
+                      value="jdbc:postgresql://localhost/mabd"/>
+            <property name="jakarta.persistence.jdbc.user" value="monuser"/>
+            <property name="jakarta.persistence.jdbc.password" value="monpasswd"/>
 
-            <property name="javax.persistence.jdbc.url"
-                      value="jdbc:mysql://mysql-nedseb.alwaysdata.net:3306/nedseb_gestionpedabd"/>
-            <property name="javax.persistence.jdbc.user" value="nedseb_user"/>
-            <property name="javax.persistence.jdbc.password" value="1234"/>
-
-            <property name="eclipselink.logging.level" value="FINE"/>
             <property name="eclipselink.ddl-generation.output-mode" value="database"/>
             <property name="eclipselink.ddl-generation" value="create-tables"/>
         </properties>
