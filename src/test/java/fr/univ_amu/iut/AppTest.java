@@ -1,12 +1,11 @@
 package fr.univ_amu.iut;
 
-import org.junit.Test;
-
-import static org.junit.Assert.assertTrue;
+import org.junit.jupiter.api.Test;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class AppTest {
     @Test
-    public void test_should_fail() {
-        assertTrue("Really serious test !!!", true);
+    public void test_should_never_fail() {
+        assertThat(true).isTrue();
     }
 }

@@ -1,6 +1,6 @@
 package fr.univ_amu.iut.tutoJPA;
 
-import javax.persistence.Embeddable;
+import jakarta.persistence.Embeddable;
 
 @Embeddable
 public class Adresse {

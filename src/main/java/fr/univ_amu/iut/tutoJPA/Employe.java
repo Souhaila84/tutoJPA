@@ -1,6 +1,6 @@
 package fr.univ_amu.iut.tutoJPA;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 @Entity //1
 public class Employe {
