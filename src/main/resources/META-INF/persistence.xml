@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
-<persistence xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-             version="2.0" xmlns="http://java.sun.com/xml/ns/persistence">
-
+<persistence xmlns="https://jakarta.ee/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="3.0">
     <persistence-unit name="employePU" transaction-type="RESOURCE_LOCAL">
         <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
 
@@ -16,6 +14,10 @@
                       value="jdbc:postgresql://localhost/mabd"/>
             <property name="jakarta.persistence.jdbc.user" value="monuser"/>
             <property name="jakarta.persistence.jdbc.password" value="monpasswd"/>
+
+            <property name="eclipselink.logging.level" value="INFO"/>
+            <property name="eclipselink.logging.level.sql" value="FINE"/>
+            <property name="eclipselink.logging.parameters" value="true"/>
 
             <property name="eclipselink.ddl-generation.output-mode" value="database"/>
             <property name="eclipselink.ddl-generation" value="create-tables"/>
