@@ -9,7 +9,7 @@
   - [Cyril Pain-Barre](mailto:cyril.pain-barre@univ-amu.fr)
   - [Sophie Nabitz](mailto:sophie.nabitz@univ-avignon.fr)
 - **Besoin d'aide ?**
-  - Consulter et/ou créer des [issues](https://github.com/IUTInfoAix-R203/tp1-git/issues).
+  - Consulter et/ou créer des [issues](https://github.com/IUTInfoAix-R202/cours/issues).
   - [Email](mailto:sebastien.nedjar@univ-amu.fr) pour une question d'ordre privée, ou pour convenir d'un rendez-vous physique.
 
 ## Tutoriel de découverte de JPA
@@ -22,7 +22,7 @@ Pour effectuer la configuration de la persistance, JPA utilise soit le mécanism
 
 ## Mise en place de l’environnement de travail
 
-Pour simplifier au maximum l’utilisation de JPA 3.1 dans ce tutoriel, Maven sera utilisé pour la construction et la gestion des dépendances. Il est donc requis de faire le tutoriel Maven avant d’attaquer celui-ci.
+Pour simplifier au maximum l’utilisation de JPA 3.1 dans ce tutoriel, Maven sera utilisé pour la construction et la gestion des dépendances. 
 
 ### Installation
 
@@ -38,82 +38,11 @@ Voici la liste des outils qui seront utilisés pour la suite de ce tutoriel :
 
 - Postgres : Un SGBD-R open source.
 
+- MySQL : Un autre SGBD-R open source.
+
 - JUnit : Framework de test unitaire java.
 
-- DbUnit : Extension de JUnit pour les applications orientées BD.
-
-Mis à par Maven et Postgres, tous les autres outils seront installés automatiquement grâce au système de gestion de dépendances de Maven.
-
-### Création du projet
-
-Pour commencer, nous allons créer le projet de test que l’on nommera `tutojpa` et qui sera dans le package `fr.univ_amu.iut`. Pour se faire on utilise la commande Maven suivante :
-
-```sh
-mvn archetype:generate -DinteractiveMode=false -DarchetypeArtifactId=maven-archetype-quickstart -DgroupId=fr.univ_amu.iut.tutojpa -DartifactId=tutojpa
-```
-
-Une fois cette commande exécutée, il faut modifier le fichier `pom.xml` pour lui rajouter les dépendances nécessaires à un projet JPA 3.1 :
-
-```XML
-<project xmlns="https://maven.apache.org/POM/4.0.0" 
-         xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
-           xsi:schemaLocation="https://maven.apache.org/POM/4.0.0 
-                               https://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
-    
-    <groupId>fr.univ_amu.iut</groupId>
-    <artifactId>tutojpa</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
-    <packaging>jar</packaging>
-    <name>tutojpa</name>
-    
-    <url>http://maven.apache.org</url>
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.source>17</maven.compiler.source>
-        <maven.compiler.target>17</maven.compiler.target>
-        <junit.jupiter.version>5.4.2</junit.jupiter.version>
-        <eclipselink.version>4.0.0-M3</eclipselink.version>
-        <jakarta.persistence.version>3.1.0</jakarta.persistence.version>
-    </properties>
-    
-    <dependencies>
-        <dependency>
-          <groupId>org.junit.jupiter</groupId>
-          <artifactId>junit-jupiter-api</artifactId>
-          <version>${junit.jupiter.version}</version>
-          <scope>test</scope>
-        </dependency>
-  
-        <dependency>
-          <groupId>org.junit.jupiter</groupId>
-          <artifactId>junit-jupiter-engine</artifactId>
-          <version>${junit.jupiter.version}</version>
-          <scope>test</scope>
-        </dependency>
-      
-        <dependency>
-          <groupId>jakarta.persistence</groupId>
-          <artifactId>jakarta.persistence-api</artifactId>
-          <version>${jakarta.persistence.version}</version>
-        </dependency>
-  
-        <dependency>
-          <groupId>org.eclipse.persistence</groupId>
-          <artifactId>org.eclipse.persistence.jpa</artifactId>
-          <version>${eclipselink.version}</version>
-        </dependency>
-  
-        <dependency>
-          <groupId>org.eclipse.persistence</groupId>
-          <artifactId>eclipselink</artifactId>
-          <version>${eclipselink.version}</version>
-        </dependency>
-    </dependencies>
-</project>
-```
-
-D’autres dépendances seront ajoutées au fur et à mesure de leur nécessité.
+Mis à par Maven, le JDK et les SGBD-R, tous les autres outils seront installés automatiquement grâce au système de gestion de dépendances de Maven.
 
 ### Création des classes métiers
 
@@ -121,35 +50,66 @@ L’exemple utilisé dans ce paragraphe est similaire à celui présenté dans l
 
 ```Java
 package fr.univ_amu.iut.tutojpa;
+
 import jakarta.persistence.*;
 
-@Entity //1
-public class Employe {
-    @Id //2
-    @GeneratedValue//3
-    private int id;
-    @Column(length=50) //4
-    private String nom;
-    private long salaire;
-    @Embedded //5
-    private Adresse adresse;
-    @ManyToOne //6
-    private Departement departement;
-    
-    public Employe() {}
-    public Employe(int id) { this.id = id; }
-    public int getId() { return id; }
-    // private void setId(int id) { this.id = id; }
-    public String getNom() { return nom; }
-    public void setNom(String nom) { this.nom = nom; }
-    public long getSalaire() { return salaire; }
-    public void setSalaire(long salaire) { this.salaire =salaire; }
-    public Adresse getAdresse() { return adresse; }
-    public void setAdresse(Adresse adresse) { this.adresse = adresse; }
-    public Departement getDepartement() { return departement; }
-    public void setDepartement(Departement departement) { 
-        this.departement = departement; 
-    }
+@Entity
+public class Employee {
+  @Id
+  @GeneratedValue
+  private int id;
+  private String name;
+  private long salary;
+
+  @Embedded
+  private Adresse adresse;
+
+  @ManyToOne(cascade = CascadeType.ALL)
+  private Department department;
+
+  public Adresse getAdresse() {
+    return adresse;
+  }
+
+  public void setAdresse(Adresse adresse) {
+    this.adresse = adresse;
+  }
+
+  public int getId() {
+    return id;
+  }
+
+  public void setId(int id) {
+    this.id = id;
+  }
+
+  public String getName() {
+    return name;
+  }
+
+  public void setName(String name) {
+    this.name = name;
+  }
+
+  public long getSalary() {
+    return salary;
+  }
+
+  public void setSalary(long salary) {
+    this.salary = salary;
+  }
+
+  public Department getDepartment() {
+    return department;
+  }
+
+  public void setDepartment(Department department) {
+    this.department = department;
+  }
+
+  public String toString() {
+    return "Employee id: " + getId() + " name: " + getName() + " with " + getDepartment();
+  }
 }
 ```
 
@@ -167,29 +127,63 @@ Notez la présence d’annotations à plusieurs endroits dans la classe `Employe
 
 6. L’annotation `@jakarta.persistence.ManyToOne` indique à JPA que la donnée membre est une association N:1.
 
-La classe `Departement` est, elle aussi, transformée en entité :
+La classe `Department` est, elle aussi, transformée en entité :
 
 ```Java
 package fr.univ_amu.iut.tutojpa;
+
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
+import java.util.Collection;
+
 @Entity
-public class Departement {
-    @Id
-    @GeneratedValue
-    private long id;
-    private String nom;
-    private String telephone;
-    public Departement() {}
-    public Departement(long id, String nom, String telephone) {
-        this.id = id;
-        this.nom = nom;
-        this.telephone = telephone;
+public class Department {
+  @Id
+  @GeneratedValue
+  private int id;
+  private String name;
+  @OneToMany(mappedBy="department")
+  private Collection<Employee> employees;
+
+  public Department() {
+    employees = new ArrayList<>();
+  }
+
+  public int getId() {
+    return id;
+  }
+
+  public void setId(int id) {
+    this.id = id;
+  }
+
+  public String getName() {
+    return name;
+  }
+
+  public void setName(String deptName) {
+    this.name = deptName;
+  }
+
+  public void addEmployee(Employee employee) {
+    if (!getEmployees().contains(employee)) {
+      getEmployees().add(employee);
+      if (employee.getDepartment() != null) {
+        employee.getDepartment().getEmployees().remove(employee);
+      }
+      employee.setDepartment(this);
     }
-    
-    public long getId() { return id; }
-    public String getNom() { return nom; }
-    public String getTelephone() { return telephone; }
+  }
+
+  public Collection<Employee> getEmployees() {
+    return employees;
+  }
+
+  public String toString() {
+    return "Department id: " + getId() +
+            ", name: " + getName();
+  }
 }
 ```
 
@@ -221,7 +215,7 @@ public class Adresse {
 ```
 
 ### Contexte de persistance
-Dans l'exemple suivant utilise le serveur MySQL local à l'image Gitpod. Si vous avez ouvert ce dépôt localement, utilisez plutôt les paramètres de votre connexion PostgresSQL de chez [Elephant SQL](https://www.elephantsql.com/plans.html). Pour Postgres, le nom complet de la classe pilote est `org.postgresql.Driver`.
+Si vous avez ouvert ce dépôt localement, utilisez plutôt les paramètres de votre connexion PostgresSQL de chez [Elephant SQL](https://www.elephantsql.com/plans.html) ou une base de données MySQL sur votre espace [Pedaweb](https://dud.univ-amu.fr/votre-espace-web-pedagogique-amu) d'AMU. Que ce soit sur l'une ou l'autre des solutions, une fois votre instance créée, vous pourrez récupérer votre URL de connexion dans votre console d'administration.
 
 Les paramètres de la connexion à la base de données sont définis dans le fichier `persistence.xml`. Ce fichier doit être situé dans le dossier `META-INF` du `jar` de l’application. Ces paramètres seront utilisés par la suite par le gestionnaire d’entités pour établir la connexion au SGBD.
 
@@ -230,58 +224,35 @@ Pour que Maven place ce fichier au bon endroit à la construction du `jar`, il l
 ```XML
 <?xml version="1.0" encoding="UTF-8" ?>
 
-<persistence xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
- xsi:schemaLocation="http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd" 
- version="2.0" xmlns="http://java.sun.com/xml/ns/persistence">
+<persistence xmlns="https://jakarta.ee/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             version="3.0">
   <persistence-unit name="employePU" transaction-type="RESOURCE_LOCAL">
     <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
-    <class>fr.univ_amu.iut.tutojpa.Employe</class>
-    <class>fr.univ_amu.iut.tutojpa.Departement</class>
+
+    <class>fr.univ_amu.iut.tutojpa.Employee</class>
+    <class>fr.univ_amu.iut.tutojpa.Department</class>
     <class>fr.univ_amu.iut.tutojpa.Adresse</class>
+
     <properties>
-      <property name="jakarta.persistence.jdbc.driver" value="com.mysql.jdbc.Driver"/>
-      <property name="jakarta.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/employeBD"/>
-      <property name="jakarta.persistence.jdbc.user"  value="monUser"/>
-      <property name="jakarta.persistence.jdbc.password"  value="monPassword"/>
-      <property name="eclipselink.logging.level" value="FINE" />
-      <property name="eclipselink.ddl-generation"  value="create-tables"/>
+      <!-- database connection properties -->
+      <property name="jakarta.persistence.jdbc.url" value="jdbc:derby:memory:employeBD;create=true"/>
+      <property name="jakarta.persistence.jdbc.user" value=""/>
+      <property name="jakarta.persistence.jdbc.password" value=""/>
+
+      <property name="eclipselink.logging.level" value="INFO"/>
+      <property name="eclipselink.logging.level.sql" value="FINE"/>
+      <property name="eclipselink.logging.parameters" value="true"/>
+
+      <property name="eclipselink.ddl-generation.output-mode" value="database"/>
+      <property name="eclipselink.ddl-generation" value="create-tables"/>
     </properties>
   </persistence-unit>
 </persistence>
 ```
 
-D’après le fichier `persistence.xml` l’application se connectera à la base `employeBD` d'un serveur MySQL local avec l’utilisateur `"monUser"` et le mot de passe `"monPassword"`. Pour paramétrer correctement ce serveur local, il faut exécuter les commandes suivantes :
+D’après le fichier `persistence.xml` l’application se connectera à la base `employeBD` d'une base de données embarquée avec l’utilisateur `""` et le mot de passe `""`. 
 
-```sh
-mysql --user=root --password=mysql --execute="create database employeBD"
-mysql --user=root --password=mysql --execute="grant all privileges on employeBD.* to monUser@localhost identified by 'monPassword'"
-mysql --user=root --password=mysql --execute="show databases"
-+--------------------+
-| Database           |
-+--------------------+
-| information_schema |
-| employeBD          |
-| mysql              |
-+--------------------+
-
-mysql --user=monUser --password=monPassword
-Welcome to the MySQL monitor.  Commands end with ; or \g.
-Your MySQL connection id is 43
-Server version: 5.1.58
-
-Copyright (c) 2000, 2010, Oracle and/or its affiliates. All rights reserved.
-This software comes with ABSOLUTELY NO WARRANTY. This is free software,
-and you are welcome to modify and redistribute it under the GPL v2 license
-
-Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
-
-mysql> use employeBD;
-Database changed
-mysql> show tables;
-Empty set (0.00 sec)
-```
-
-Comme on peut le voir pour l’instant notre base de données est totalement vide.
+Pour l’instant notre base de données est totalement vide.
 
 ### Programme principal
 
@@ -289,61 +260,34 @@ Maintenant que l’entité `Employe` est développée et compilée, nous allons 
 
 ```Java
 package fr.univ_amu.iut.tutojpa;
+
 import jakarta.persistence.*;
 
-public class App 
-{
-    public static void main(String[] args) {
-        // Initializes the Entity manager
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("employePU");
-        EntityManager em = emf.createEntityManager();
+public class TestJPA {
+  public static void main(String[] args) {
+    // Initializes the Entity manager
+    try (EntityManagerFactory emf = Persistence.createEntityManagerFactory("employePU")) {
+      try (EntityManager em = emf.createEntityManager()) {
         EntityTransaction tx = em.getTransaction();
 
-        // Creates a new object and persists it
-        Employe employe = new Employe();
-        employe.setNom("Dupont");
-        employe.setSalaire(5000);
-        tx.begin();
-        em.persist(employe);
-        tx.commit();
+        Department informatique = new Department();
+        informatique.setName("Informatique");
 
-        em.close();
-        emf.close();
+        Employee dupont = new Employee();
+        dupont.setName("Dupont");
+        dupont.setDepartment(informatique);
+        dupont.setSalary(5000);
+
+        tx.begin();
+        em.persist(dupont);
+        tx.commit();
+      }
     }
+  }
 }
 ```
 
-Avant de lancer ce programme, il faut ajouter dans le fichier `pom.xml` les dépendances au connecteur MySQL, Postgres et Derby. Pour ajouter ces dépendances, il faut rajouter les lignes suivantes à l'interieur de la balise `dependencies`:
-
-```XML
-<dependency>
-  <groupId>mysql</groupId>
-  <artifactId>mysql-connector-java</artifactId>
-  <version>8.0.29</version>
-</dependency>
-
-<dependency>
-  <groupId>org.postgresql</groupId>
-  <artifactId>postgresql</artifactId>
-  <version>42.3.5</version>
-</dependency>
-
-<dependency>
-  <groupId>org.apache.derby</groupId>
-  <artifactId>derby</artifactId>
-  <version>${derby.version}</version>
-  <scope>test</scope>
-</dependency>
-
-<dependency>
-  <groupId>org.apache.derby</groupId>
-  <artifactId>derbyclient</artifactId>
-  <version>${derby.version}</version>
-  <scope>test</scope>
-</dependency>
-```
-
-Maintenant nous allons utiliser la commande Maven `clean compile` pour compiler notre projet et le plugin `exec` pour lancer la classe principale.
+Utiliser la commande Maven `clean compile` pour compiler le projet et le plugin `exec` pour lancer la classe principale.
 
 ```sh
 mvn clean compile
@@ -356,55 +300,8 @@ Lorsque nous lançons la classe `fr.univ_amu.iut.tutojpa.TestJPA` plusieurs chos
 
 - L’employé "Dupont" est inséré dans la base de données (avec un identifiant automatiquement généré).
 
-Regardons l’état de la base de données pour comprendre ce qui s’est passé.
+Après l'exécution de votre programme, aller voir dans votre console SQL les différentes tables créées ainsi que leur contenu. Comme vous le verrez, en plus des relations associées à chaque entité, il y a aussi une séquence qui permet de gérer les clés autogénérées.
 
-```sh
-mysql --user=monUser --password=monPassword employeBD
-Reading table information for completion of table and column names
-You can turn off this feature to get a quicker startup with -A
+JPA associe une relation à chaque classe marquée par l’annotation `@Entity` et les données membres sont converties en attribut. Il gère aussi les associations N:1 en créant la clef étrangère dont le nom est construit à partir du nom de la clef et de la table liée. La classe `Adresse` est directement intégrée dans la table de l’entité `Employe`.
 
-Welcome to the MySQL monitor.  Commands end with ; or \g.
-Your MySQL connection id is 54
-Server version: 5.1.58-1ubuntu1 (Ubuntu)
-
-Copyright (c) 2000, 2010, Oracle and/or its affiliates. All rights reserved.
-This software comes with ABSOLUTELY NO WARRANTY. This is free software,
-and you are welcome to modify and redistribute it under the GPL v2 license
-
-Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
-
-mysql> show tables;
-+---------------------+
-| Tables_in_employeBD |
-+---------------------+
-| DEPARTEMENT         |
-| EMPLOYE             |
-| SEQUENCE            |
-+---------------------+
-3 rows in set (0.00 sec)
-
-mysql> describe EMPLOYE;
-+----------------+--------------+------+-----+---------+-------+
-| Field          | Type         | Null | Key | Default | Extra |
-+----------------+--------------+------+-----+---------+-------+
-| ID             | bigint(20)   | NO   | PRI | NULL    |       |
-| NOM            | varchar(50)  | YES  |     | NULL    |       |
-| SALAIRE        | bigint(20)   | YES  |     | NULL    |       |
-| CODEPOSTAL     | varchar(255) | YES  |     | NULL    |       |
-| NUMERO         | int(11)      | YES  |     | NULL    |       |
-| RUE            | varchar(255) | YES  |     | NULL    |       |
-| VILLE          | varchar(255) | YES  |     | NULL    |       |
-| DEPARTEMENT_ID | bigint(20)   | YES  | MUL | NULL    |       |
-+----------------+--------------+------+-----+---------+-------+
-8 rows in set (0.00 sec)
-
-mysql> select * from EMPLOYE;
-+-----+--------+---------+------------+--------+------+-------+----------------+
-| ID  | NOM    | SALAIRE | CODEPOSTAL | NUMERO | RUE  | VILLE | DEPARTEMENT_ID |
-+-----+--------+---------+------------+--------+------+-------+----------------+
-|   1 | Dupont |    5000 | NULL       |   NULL | NULL | NULL  |           NULL |
-+-----+--------+---------+------------+--------+------+-------+----------------+
-1 rows in set (0.00 sec)
-```
-
-JPA associe une relation à chaque classe marquée par l’annotation `@Entity` et les données membres sont converties en attribut. Il gère aussi les associations N:1 en créant la clef étrangère dont le nom est construit à partir du nom de la clef et de la table liée. La classe `Adresse` est directement intégrée dans la table de l’entité `Employe`. Pour les clefs autogénérées, JPA utilise une table nommée `SEQUENCE` pour mémoriser les identifiants déjà attribués.
+Maintenant que vous avez fait marcher cet exemple, vous pouvez passer au TP en prenant soin de conserver l'URL de connexion à la base de données.

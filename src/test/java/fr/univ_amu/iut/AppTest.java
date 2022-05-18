@@ -1,16 +1,14 @@
 package fr.univ_amu.iut;
 
-import fr.univ_amu.iut.tutojpa.Employe;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
-import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.Persistence;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class TestJPA {
+public class AppTest {
     static EntityManager em;
     static EntityManagerFactory emf;
 

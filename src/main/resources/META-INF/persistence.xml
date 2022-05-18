@@ -4,16 +4,15 @@
     <persistence-unit name="employePU" transaction-type="RESOURCE_LOCAL">
         <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
 
-        <class>fr.univ_amu.iut.tutojpa.Employe</class>
-        <class>fr.univ_amu.iut.tutojpa.Departement</class>
+        <class>fr.univ_amu.iut.tutojpa.Employee</class>
+        <class>fr.univ_amu.iut.tutojpa.Department</class>
         <class>fr.univ_amu.iut.tutojpa.Adresse</class>
 
         <properties>
-            <property name="jakarta.persistence.jdbc.driver" value="org.postgresql.Driver"/>
-            <property name="jakarta.persistence.jdbc.url"
-                      value="jdbc:postgresql://localhost/mabd"/>
-            <property name="jakarta.persistence.jdbc.user" value="monuser"/>
-            <property name="jakarta.persistence.jdbc.password" value="monpasswd"/>
+            <!-- database connection properties -->
+            <property name="jakarta.persistence.jdbc.url" value="jdbc:derby:memory:employeBD;create=true"/>
+            <property name="jakarta.persistence.jdbc.user" value=""/>
+            <property name="jakarta.persistence.jdbc.password" value=""/>
 
             <property name="eclipselink.logging.level" value="INFO"/>
             <property name="eclipselink.logging.level.sql" value="FINE"/>
