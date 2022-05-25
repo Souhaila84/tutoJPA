@@ -215,7 +215,7 @@ public class Adresse {
 ```
 
 ### Contexte de persistance
-Si vous avez ouvert ce dépôt localement, utilisez plutôt les paramètres de votre connexion PostgresSQL de chez [Elephant SQL](https://www.elephantsql.com/plans.html) ou une base de données MySQL sur votre espace [Pedaweb](https://dud.univ-amu.fr/votre-espace-web-pedagogique-amu) d'AMU. Que ce soit sur l'une ou l'autre des solutions, une fois votre instance créée, vous pourrez récupérer votre URL de connexion dans votre console d'administration.
+Si vous travaillez en dehors de l'IUT, utilisez les paramètres d'une base de données PostgresSQL de chez [Elephant SQL](https://www.elephantsql.com/plans.html). À l'IUT, sur les machines du département, vous pouvez aussi vous connecter à une base de données MySQL sur votre espace [Pedaweb](https://dud.univ-amu.fr/votre-espace-web-pedagogique-amu) d'AMU. Que ce soit sur l'une ou l'autre des solutions, une fois votre instance créée, vous pourrez récupérer votre URL de connexion dans votre console d'administration.
 
 Les paramètres de la connexion à la base de données sont définis dans le fichier `persistence.xml`. Ce fichier doit être situé dans le dossier `META-INF` du `jar` de l’application. Ces paramètres seront utilisés par la suite par le gestionnaire d’entités pour établir la connexion au SGBD.
 
@@ -250,9 +250,9 @@ Pour que Maven place ce fichier au bon endroit à la construction du `jar`, il l
 </persistence>
 ```
 
-D’après le fichier `persistence.xml` l’application se connectera à la base `employeBD` d'une base de données embarquée avec l’utilisateur `""` et le mot de passe `""`. 
+D’après le fichier `persistence.xml` ci-dessus, l’application se connectera à la base Derby embarquée en mémoire `employeBD` avec l’utilisateur `""` et le mot de passe `""`. 
 
-Pour l’instant notre base de données est totalement vide.
+Adaptez les données de connexion pour utiliser votre base de données précédemment créée.
 
 ### Programme principal
 
@@ -287,7 +287,7 @@ public class TestJPA {
 }
 ```
 
-Utiliser la commande Maven `clean compile` pour compiler le projet et le plugin `exec` pour lancer la classe principale.
+Utiliser la commande `mvn clean compile` pour compiler le projet et le plugin `exec` pour lancer la classe principale.
 
 ```sh
 mvn clean compile
