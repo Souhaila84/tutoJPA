@@ -62,17 +62,17 @@ public class Employee {
   private long salary;
 
   @Embedded
-  private Adresse adresse;
+  private Adress adress;
 
   @ManyToOne(cascade = CascadeType.ALL)
   private Department department;
 
-  public Adresse getAdresse() {
-    return adresse;
+  public Adress getAdresse() {
+    return adress;
   }
 
-  public void setAdresse(Adresse adresse) {
-    this.adresse = adresse;
+  public void setAdresse(Adress adress) {
+    this.adress = adress;
   }
 
   public int getId() {
@@ -231,7 +231,7 @@ Pour que Maven place ce fichier au bon endroit à la construction du `jar`, il l
 
     <class>fr.univ_amu.iut.tutojpa.Employee</class>
     <class>fr.univ_amu.iut.tutojpa.Department</class>
-    <class>fr.univ_amu.iut.tutojpa.Adresse</class>
+    <class>fr.univ_amu.iut.tutojpa.Adress</class>
 
     <properties>
       <!-- database connection properties -->
@@ -263,7 +263,7 @@ package fr.univ_amu.iut.tutojpa;
 
 import jakarta.persistence.*;
 
-public class TestJPA {
+public class ExempleJPA {
   public static void main(String[] args) {
     // Initializes the Entity manager
     try (EntityManagerFactory emf = Persistence.createEntityManagerFactory("employePU")) {
@@ -291,10 +291,10 @@ Utiliser la commande `mvn clean compile` pour compiler le projet et le plugin `e
 
 ```sh
 mvn clean compile
-mvn exec:java -Dexec.mainClass="fr.univ_amu.iut.tutojpa.TestJPA"
+mvn exec:java -Dexec.mainClass="fr.univ_amu.iut.tutojpa.ExempleJPA"
 ```
 
-Lorsque nous lançons la classe `fr.univ_amu.iut.tutojpa.TestJPA` plusieurs choses vont se produire :
+Lorsque nous lançons la classe `fr.univ_amu.iut.tutojpa.ExempleJPA` plusieurs choses vont se produire :
 
 - Comme la propriété `eclipselink.ddl-generation` est initialisée à `create-tables` dans le fichier `persistence.xml`, les différentes tables sont créées si nécessaire.
 

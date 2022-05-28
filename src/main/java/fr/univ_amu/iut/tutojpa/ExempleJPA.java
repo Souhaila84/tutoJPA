@@ -2,7 +2,7 @@ package fr.univ_amu.iut.tutojpa;
 
 import jakarta.persistence.*;
 
-public class TestJPA {
+public class ExempleJPA {
     public static void main(String[] args) {
         // Initializes the Entity manager
         try (EntityManagerFactory emf = Persistence.createEntityManagerFactory("employePU")) {

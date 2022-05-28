@@ -3,16 +3,16 @@ package fr.univ_amu.iut.tutojpa;
 import jakarta.persistence.Embeddable;
 
 @Embeddable
-public class Adresse {
+public class Adress {
     private int numero;
     private String rue;
     private String codePostal;
     private String ville;
 
-    public Adresse() {
+    public Adress() {
     }
 
-    public Adresse(int numero, String rue, String codePostal, String ville) {
+    public Adress(int numero, String rue, String codePostal, String ville) {
         this.numero = numero;
         this.rue = rue;
         this.codePostal = codePostal;

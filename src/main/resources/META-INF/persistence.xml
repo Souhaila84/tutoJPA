@@ -6,7 +6,7 @@
 
         <class>fr.univ_amu.iut.tutojpa.Employee</class>
         <class>fr.univ_amu.iut.tutojpa.Department</class>
-        <class>fr.univ_amu.iut.tutojpa.Adresse</class>
+        <class>fr.univ_amu.iut.tutojpa.Adress</class>
 
         <properties>
             <!-- database connection properties -->
