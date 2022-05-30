@@ -14,7 +14,7 @@
 
 ## Tutoriel de découverte de JPA
 
-L’objectif de ce tutoriel est de vous présenter rapidement JPA 3.1 et de vous le faire tester sur un projet extrêmement simple. Pour rappel, Jakarta Persistence API est une spécification standard de Java permettant aux développeurs de gérer et manipuler des données relationnelles dans leurs applications. Cette API, bien qu’originaire du monde Jakarta EE (Jakarta Entreprise Edition), peut être utilisée aussi bien dans une application Java SE (Java Standard Edition) que dans un conteneur d’application Jakarta EE.
+L’objectif de ce tutoriel est de vous présenter rapidement JPA 3.1 et de vous le faire tester sur un projet extrêmement simple. Jakarta Persistence API est une spécification standard de Java permettant aux développeurs de gérer et manipuler des données relationnelles dans leurs applications. Cette API, bien qu’originaire du monde Jakarta EE (Jakarta Entreprise Edition), peut être utilisée aussi bien dans une application Java SE (Java Standard Edition) que dans un conteneur d’application Jakarta EE.
 
 JPA étant uniquement une spécification, il peut en exister plusieurs implémentations différentes. Si le code d’un projet se conforme parfaitement à la spécification, il est possible de passer d’une implémentation à une autre sans trop de difficulté. Comme Maven, JPA utilise la philosophie "Convention plutôt que configuration". L’idée est de faire décroître le nombre de décisions qu’un développeur doit prendre en lui proposant une convention adaptée au cas d’utilisation le plus classique qu’il pourra amender pour correspondre à ce qu’il veut faire précisément. Ainsi la configuration n’est plus la norme, mais l’exception.
 
@@ -253,6 +253,19 @@ Pour que Maven place ce fichier au bon endroit à la construction du `jar`, il l
 D’après le fichier `persistence.xml` ci-dessus, l’application se connectera à la base Derby embarquée en mémoire `employeBD` avec l’utilisateur `""` et le mot de passe `""`. 
 
 Adaptez les données de connexion pour utiliser votre base de données précédemment créée.
+
+Comme vous l'avez vu en JDBC, l'URL de connexion devra être de la forme `jdbc:<type de SGBD>:<information de connexion au SGBD>`.
+la sous-chaine `<type de SGBD>` est particulièrement importante car c'est elle qui permet de choisir le pilote JDBC utilisé. Si vous obtenez un message d'erreur vous informant qu'il est impossible de trouver un pilote adapté (*"No suitable Driver found"*), il est fort probable que vous ayez fait une erreur à cet endroit. Par exemple, avec Postgres, cette chaine doit être `postgresql`.
+
+Concernant les informations de connexion au SGBD, chaque Driver est libre d'adopter le format qu'il souhaite. Il faudra donc systématiquement vérifié dans la documentation pour vérifier les informations attendues. Voici quelques exemples d'URL pour les principaux SGBD que vous connaissez : 
+
+- Derby embarqué : `jdbc:derby:memory:employeBD;create=true`
+- Derby fichier : `jdbc:derby:employeBD/db;create=true`
+- Mysql : `jdbc:mysql://localhost:3306/employeBD`
+- Oracle : `jdbc:oracle:thin:@localhost:1521:employeBD`
+- PostgreSQL : `jdbc:postgresql://localhost:5432/employeBD`
+
+Dans chacun de ces exemples, le nom d'hôte est `localhost` et le nom de la base de données est `employeBD`. Le numéro de port est à précisé quand on n'utilise pas celui par défaut.
 
 ### Programme principal
 
