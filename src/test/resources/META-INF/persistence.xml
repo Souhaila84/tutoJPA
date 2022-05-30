@@ -5,7 +5,7 @@
         <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
         <class>fr.univ_amu.iut.tutojpa.Employee</class>
         <class>fr.univ_amu.iut.tutojpa.Department</class>
-        <class>fr.univ_amu.iut.tutojpa.Adress</class>
+        <class>fr.univ_amu.iut.tutojpa.Address</class>
 
         <properties>
             <property name="eclipselink.target-database" value="Derby"/>

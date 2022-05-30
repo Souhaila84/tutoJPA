@@ -11,17 +11,17 @@ public class Employee {
     private long salary;
 
     @Embedded
-    private Adress adress;
+    private Address address;
 
     @ManyToOne(cascade = CascadeType.ALL)
     private Department department;
 
-    public Adress getAdresse() {
-        return adress;
+    public Address getAdresse() {
+        return address;
     }
 
-    public void setAdresse(Adress adress) {
-        this.adress = adress;
+    public void setAdresse(Address address) {
+        this.address = address;
     }
 
     public int getId() {

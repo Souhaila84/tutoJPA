@@ -62,17 +62,17 @@ public class Employee {
   private long salary;
 
   @Embedded
-  private Adress adress;
+  private Address address;
 
   @ManyToOne(cascade = CascadeType.ALL)
   private Department department;
 
-  public Adress getAdresse() {
-    return adress;
+  public Address getAdresse() {
+    return address;
   }
 
-  public void setAdresse(Adress adress) {
-    this.adress = adress;
+  public void setAdresse(Address address) {
+    this.address = address;
   }
 
   public int getId() {
@@ -143,7 +143,7 @@ public class Department {
   @GeneratedValue
   private int id;
   private String name;
-  @OneToMany(mappedBy="department")
+  @OneToMany(mappedBy="department", fetch = FetchType.LAZY)
   private Collection<Employee> employees;
 
   public Department() {
@@ -187,30 +187,61 @@ public class Department {
 }
 ```
 
-La classe `Adresse` doit être annotée par l’annotation `@jakarta.persistence.Embeddable` pour pouvoir être intégrée dans la classe `Employe` :
+La classe `Address` doit être annotée par l’annotation `@jakarta.persistence.Embeddable` pour pouvoir être intégrée dans la classe `Employe` :
 
 ```Java
 package fr.univ_amu.iut.tutojpa;
-import jakarta.persistence.*;
+
+import jakarta.persistence.Embeddable;
 
 @Embeddable
-public class Adresse {
-    private int numero;
-    private String rue;
-    private String codePostal;
-    private String ville;
-        
-    public Adresse() {}
-    public Adresse(int numero, String rue, String codePostal, String ville) {
-        this.numero = numero;
-        this.rue = rue;
-        this.codePostal = codePostal;
-        this.ville = ville;
-    }
-    public int getNumero() { return numero; }
-    public String getRue() { return rue; }
-    public String getCodePostal() { return codePostal; }
-    public String getVille() { return ville; }
+public class Address {
+  private int number;
+  private String street;
+  private String zipCode;
+  private String city;
+
+  public Address() {
+  }
+
+  public Address(int number, String street, String zipCode, String city) {
+    this.number = number;
+    this.street = street;
+    this.zipCode = zipCode;
+    this.city = city;
+  }
+
+  public int getNumber() {
+    return number;
+  }
+
+  public void setNumber(int number) {
+    this.number = number;
+  }
+
+  public String getStreet() {
+    return street;
+  }
+
+  public void setStreet(String street) {
+    this.street = street;
+  }
+
+  public String getZipCode() {
+    return zipCode;
+  }
+
+  public void setZipCode(String zipCode) {
+    this.zipCode = zipCode;
+  }
+
+  public String getCity() {
+    return city;
+  }
+
+  public void setCity(String city) {
+    this.city = city;
+  }
 }
 ```
 
@@ -231,7 +262,7 @@ Pour que Maven place ce fichier au bon endroit à la construction du `jar`, il l
 
     <class>fr.univ_amu.iut.tutojpa.Employee</class>
     <class>fr.univ_amu.iut.tutojpa.Department</class>
-    <class>fr.univ_amu.iut.tutojpa.Adress</class>
+    <class>fr.univ_amu.iut.tutojpa.Address</class>
 
     <properties>
       <!-- database connection properties -->
